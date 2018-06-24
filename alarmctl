@@ -1,0 +1,58 @@
+#!/bin/bash
+########################################
+# Init and control script for Alarmify #
+#   by Eric Thompson (October 2017)    #
+########################################
+
+FIND_PID="pgrep -u root -fo alarmify"
+START_ALARM="/usr/bin/python /root/alarmify/alarmify.py > /dev/null 2>&1 & disown"
+
+do_start () {
+	pid=$($FIND_PID)
+	if [[ $pid ]]; then
+		echo "Alarmify is already running with PID: $pid"
+	else
+		echo "Starting Alarmify..."
+		$($START_ALARM)
+	fi
+}
+
+do_status () {
+	pid=$($FIND_PID)
+	if [[ $pid ]]; then
+		echo "Alarmify is running with PID: $pid"
+	else
+		echo "Alarmify is not currently running"
+	fi
+}
+
+do_stop () {
+	pid=$($FIND_PID)
+	if [[ $pid ]]; then
+		echo "Stopping Alarmify..."
+		$(kill $pid) 
+	else
+		echo "Alarmify is not currently running"
+	fi
+}
+
+case "$1" in
+  start|"")
+        do_start
+        ;;
+  restart|reload|force-reload)
+        do_stop
+        do_start
+        ;;
+  stop)
+        do_stop
+        ;;
+  status)
+        do_status
+        exit $?
+        ;;
+  *)
+        echo "Usage: alarmctl [start|stop|restart|status]" >&2
+        exit 3
+        ;;
+esac

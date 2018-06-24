@@ -1,0 +1,27 @@
+player:
+  host: "127.0.0.1"
+  uri: spotify:user:<user-name>:playlist:<playlist-id>
+alarm:
+  snooze_time: 300
+  wakeup_period: 3600
+  default_volume: 10
+  min_vol: 3
+  max_vol: 100
+  schedule:
+    mon: "7:00"
+    tue: "7:00"
+    wed: "7:00"
+    thu: "7:00"
+    fri: "7:00"
+    sat: 0
+    sun: 0
+controls:
+  v_up: 22
+  v_dn: 17
+  prev: 9
+  pp: 10
+  next: 11
+  snooze: 4
+logging:
+  logpath: "./"
+  logname: "alarm.log"
