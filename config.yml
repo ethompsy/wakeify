@@ -1,11 +1,12 @@
 player:
   host: "127.0.0.1"
   uri: spotify:user:<user-name>:playlist:<playlist-id>
+  playlist_id: 37i9dQZF1DZ06evO30WyaZ
 alarm:
   snooze_time: 300
   wakeup_period: 3600
-  default_volume: 10
-  min_vol: 3
+  default_volume: 100
+  min_vol: 50
   max_vol: 100
   schedule:
     mon: "7:00"

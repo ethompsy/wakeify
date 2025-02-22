@@ -20,4 +20,4 @@ tl;dr: run `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
 ### Spotify Player
 Install [spotify_player](https://github.com/aome510/spotify-player) using the [daemon option](https://github.com/aome510/spotify-player?tab=readme-ov-file#daemon). The instructions are a bit confusing so you can take my word for it and run:
 
- `cargo install spotify_player --features daemon,rodio-backend,sixel --locked`
+ `cargo install spotify_player --features daemon,rodio-backend --locked`

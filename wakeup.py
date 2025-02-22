@@ -1,4 +1,4 @@
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 import datetime
 import os
 import playback
@@ -7,6 +7,14 @@ import time
 from time import sleep
 import yaml
 
+try:
+    # checks if you have access to RPi.GPIO, which is available inside RPi
+    import RPi.GPIO as GPIO
+except Exception as e:
+    # In case of exception, you are executing your script outside of RPi, then import Mock.GPIO
+    print(f"Exception: {e}")
+    print("Loading Mock.GPIO")
+    import Mock.GPIO as GPIO
 
 class Alarm(threading.Thread):
     def __init__(self, config):
@@ -42,9 +50,8 @@ class Alarm(threading.Thread):
         self.start()
         return
 
-
     def run(self):
-        print "Alarm running!"
+        print("Alarm running!")
         while self.keep_running:
             self.load_schedule()
             if self.alarm_day:
@@ -60,17 +67,15 @@ class Alarm(threading.Thread):
             time.sleep(10)
         return
 
-
     def snooze(self, b):
         if self.alarm:
-            print "Snoozed!!"
+            print("Snoozed!!")
             self.snoozed = True
             playback.pause()
         return
 
-
     def alarm_time(self):
-        print "ALARM TIME!!!"
+        print("ALARM TIME!!!")
         self.alarm = True
         playback.load_playlist()
         time.sleep(2)
@@ -93,7 +98,6 @@ class Alarm(threading.Thread):
                 self.wakeup_period = 0
         return
 
-
     def load_schedule(self):
         day_num = time.localtime().tm_wday
         day = {
@@ -113,10 +117,9 @@ class Alarm(threading.Thread):
             self.wake_hour = wakeup[0]
             self.wake_min = wakeup[1]
             self.alarm_day = True
-        except:
+        except Exception as e:
+            print(f"ERROR!! {e}")
             self.alarm_day = False
-
 
     def die(self):
         self.keep_running = False
-

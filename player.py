@@ -1,8 +1,16 @@
 
-import RPi.GPIO as GPIO
 import playback
 import threading
 from time import sleep
+
+try:
+    # checks if you have access to RPi.GPIO, which is available inside RPi
+    import RPi.GPIO as GPIO
+except Exception as e:
+    # In case of exception, you are executing your script outside of RPi, then import Mock.GPIO
+    print(f"Exception: {e}")
+    print("Loading Mock.GPIO")
+    import Mock.GPIO as GPIO
 
 
 class Player(threading.Thread):
@@ -33,11 +41,12 @@ class Player(threading.Thread):
         GPIO.setup(self.prv, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(self.pp, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(self.nxt, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        ### Volume knob events
-        # setup callback thread for the A and B encoder
-        # use interrupts for all inputs
-        self.host = config['player']['host']
-        self.uri = config['player']['uri']
+        """ Volume knob events
+        Setup callback thread for the A and B encoder
+        use interrupts for all inputs
+        """
+        # self.host = config['player']['host']
+        # self.uri = config['player']['uri']
         playback.load_playlist()
         GPIO.add_event_detect(
             self.v_dn,
@@ -75,33 +84,29 @@ class Player(threading.Thread):
         self.start()
         return
 
-
     def pr(self, b):
         playback.prev()
         return
 
-
     def pyps(self, b):
-        print "pp pressed"
+        print("pp pressed")
         playback.pp()
         return
-
 
     def nx(self, b):
         playback.next()
         return
 
-
     def volume_up(self, k):
         # read both of the switches
         up = GPIO.input(self.v_up)
         down = GPIO.input(self.v_dn)
-        print "up: " + str(up)
-        print "down: " + str(down)
+        print(f"up: {up}")
+        print(f"down: {down}")
 
         if (up == 1) and (down == 0) : # up then down ->
             self.volume_now += 1
-            print "direction -> ", self.volume_now
+            print(f"direction -> {self.volume_now}")
             while (up != 1 and down !=1):
                 up = GPIO.input(self.v_up)
                 down = GPIO.input(self.v_dn)
@@ -116,7 +121,7 @@ class Player(threading.Thread):
         down = GPIO.input(self.v_dn)
         if (up == 0) and (down == 1):
             self.volume_now -= 1
-            print "direction <- ", self.volume_now
+            print(f"direction <- {self.volume_now}")
              # A is already high, wait for A to drop to end the click cycle
             while (up != 1 and down !=1):
                 up = GPIO.input(self.v_up)
@@ -126,9 +131,8 @@ class Player(threading.Thread):
         else: # discard all other combinations
             return
 
-
     def run(self):
-        print "Player running!"
+        print("Player running!")
         while self.keep_running:
             if playback.tracks() == 0:
                 playback.load_playlist()

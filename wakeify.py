@@ -1,13 +1,16 @@
-from daemonize import Daemonize
+#!/usr/bin/env python3
+
+# from daemonize import Daemonize
 from time import sleep
 import player
 import wakeup
 import yaml
+from yaml import Loader
 
 
 def config(config_path):
     with open(config_path, 'r') as ymlfile:
-        return yaml.load(ymlfile)
+        return yaml.load(ymlfile, Loader=Loader)
 
 
 def main():
@@ -20,7 +23,9 @@ def main():
     return
 
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()
+
 #pid = "/tmp/alarmify.pid"
 #daemon = Daemonize(app="alarmify", pid=pid, action=main)
 #daemon.start()

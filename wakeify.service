@@ -1,0 +1,15 @@
+[Unit]
+Description=Wakeify: A Teenager-proof Alarm Clock for Linux
+Documentation=https://github.com/ethompsy/wakeify
+Wants=sound.target
+After=sound.target
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/alarmify
+Restart=always
+RestartSec=12
+
+[Install]
+WantedBy=default.target
